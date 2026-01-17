@@ -1,0 +1,25 @@
+.login-box {
+  margin-top: 200rpx;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1px solid #eee;
+  font-size: 28rpx;
+}
+
+.input-inline {
+  text-align: right;
+  color: #666;
+}
+
+.dish-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 0;
+  border-bottom: 1px solid #eee;
+}

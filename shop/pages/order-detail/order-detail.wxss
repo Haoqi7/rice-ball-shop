@@ -1,0 +1,130 @@
+@import "../order/order.wxss";
+
+.container {
+  padding: 30rpx;
+  background-color: #F5EBDC;
+  min-height: 100vh;
+}
+
+/* 状态进度卡片 */
+.status-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.05);
+  margin-bottom: 30rpx;
+}
+
+.step-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  background: #eee;
+  color: #999;
+  text-align: center;
+  line-height: 50rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  transition: all 0.3s;
+}
+
+.step-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.step-line {
+  flex: 1;
+  height: 4rpx;
+  background: #eee;
+  margin: 0 10rpx;
+  margin-bottom: 35rpx; /* 对齐圆圈中心 */
+  position: relative;
+  z-index: 1;
+}
+
+/* 激活状态 */
+.step-item.active .step-circle {
+  background: #D2B48C;
+  color: #fff;
+  box-shadow: 0 2rpx 10rpx rgba(210, 180, 140, 0.4);
+}
+.step-item.active .step-text {
+  color: #D2B48C;
+  font-weight: bold;
+}
+.step-line.active-line {
+  background: #D2B48C;
+}
+
+.current-status-tip {
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  padding-top: 20rpx;
+  border-top: 1px dashed #eee;
+}
+
+/* 详情卡片 */
+.detail-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.items-box {
+  background: #f9f9f9;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  margin: 30rpx 0;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+  font-size: 30rpx;
+}
+
+.remark-box {
+  background: #fff8e1;
+  padding: 15rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #8d6e63;
+  margin-bottom: 40rpx;
+}

@@ -1,0 +1,96 @@
+.home-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60rpx 40rpx;
+}
+
+.header {
+  text-align: center;
+  margin-top: 60rpx;
+}
+
+.shop-name {
+  font-size: 48rpx;
+  font-weight: 900;
+  color: #8B4513;
+  margin-bottom: 20rpx;
+}
+
+.welcome {
+  font-size: 30rpx;
+  color: #A0522D;
+}
+
+.action-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.btn-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+.btn-main {
+  width: 100%;
+  height: 180rpx;
+  border-radius: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 0 #bcaaa4;
+  transition: all 0.1s;
+}
+
+.btn-main:active {
+  box-shadow: 0 2rpx 0 #bcaaa4;
+  transform: translateY(6rpx);
+}
+
+.order-btn {
+  background-color: #D2B48C;
+  color: white;
+}
+
+.make-btn {
+  background-color: #90EE90;
+  color: #335c33;
+}
+
+.icon {
+  font-size: 60rpx;
+  margin-bottom: 10rpx;
+}
+
+.btn-main text:last-child {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.admin-entry {
+  margin-top: 60rpx;
+  font-size: 24rpx;
+  color: #bcaaa4;
+  padding: 20rpx;
+}
+
+.notice-title {
+  font-weight: bold;
+  color: #8B4513;
+  margin-bottom: 10rpx;
+}
+
+.notice-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}

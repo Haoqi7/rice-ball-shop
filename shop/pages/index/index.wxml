@@ -1,0 +1,29 @@
+<view class="container home-container">
+  <view class="header">
+    <view class="shop-name">{{config.shopName}}</view>
+    <view class="welcome">{{config.welcomeMsg}}</view>
+  </view>
+
+  <view class="action-area">
+    <view class="btn-group">
+      <view class="btn-main order-btn" bindtap="navToOrder" hover-class="btn-hover">
+        <text class="icon">🍱</text>
+        <text>我要下单</text>
+      </view>
+      <view class="btn-main make-btn" bindtap="navToKitchen" hover-class="btn-hover">
+        <text class="icon">👩‍🍳</text>
+        <text>进入后厨</text>
+      </view>
+    </view>
+    
+    <!-- 管理入口，做小一点 -->
+    <view class="admin-entry" bindtap="navToAdmin">
+      <text>⚙️ 店铺管理</text>
+    </view>
+  </view>
+
+  <view class="footer-notice card">
+    <view class="notice-title">📢 下单须知</view>
+    <text class="notice-content">{{config.notice}}</text>
+  </view>
+</view>

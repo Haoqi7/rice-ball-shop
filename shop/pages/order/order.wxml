@@ -1,0 +1,97 @@
+<view class="container">
+  <!-- 顶部：菜品分类 -->
+  <view class="tabs">
+    <view wx:for="{{categories}}" wx:key="*this" 
+      class="tab-item {{curCategory===item?'active':''}}" 
+      data-cat="{{item}}" bindtap="switchCategory">
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 中间：菜品列表 -->
+  <scroll-view scroll-y class="menu-list">
+    <block wx:for="{{menuList}}" wx:key="id">
+      <view class="menu-item card" wx:if="{{item.category === curCategory && item.isOn}}">
+        <view class="menu-info">
+          <view class="menu-header">
+            <view class="menu-name">{{item.name}}</view>
+            <view class="price-tag">一份</view>
+          </view>
+          <view class="menu-desc">{{item.intro}}</view>
+          
+          <view class="menu-action">
+            <view class="stepper">
+              <view class="step-btn minus" catchtap="updateCart" data-id="{{item.id}}" data-op="-1" wx:if="{{cart[item.id] > 0}}">-</view>
+              <view class="step-num" wx:if="{{cart[item.id] > 0}}">{{cart[item.id]}}</view>
+              <view class="step-btn plus" catchtap="updateCart" data-id="{{item.id}}" data-op="1">+</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <!-- 垫底高度增加，防止被底部订单列表遮挡 -->
+    <view style="height: 400rpx;"></view>
+  </scroll-view>
+
+  <!-- 底部区域：购物车 + 订单列表 -->
+  <view class="bottom-area">
+    
+    <!-- 1. 购物车栏 (如果有商品选中) -->
+    <view class="cart-bar" wx:if="{{totalCount > 0}}">
+      <view class="cart-info" bindtap="showCartDetail">
+        <view class="cart-icon-wrap">🛒 <view class="badge">{{totalCount}}</view></view>
+        <view class="cart-text">已选 {{totalCount}} 份餐点</view>
+      </view>
+      <view class="pay-btn" bindtap="showSubmitModal">去下单</view>
+    </view>
+
+    <!-- 2. 我的订单列表 (显示最近的订单，可滚动) -->
+    <view class="my-orders-panel" wx:if="{{myRecentOrders.length > 0}}">
+      <view class="panel-header">我的订单 (点击查看/取消)</view>
+      <scroll-view scroll-y class="orders-scroll">
+        <block wx:for="{{myRecentOrders}}" wx:key="id">
+          <view class="mini-order-item" bindtap="navToDetail" data-id="{{item.id}}">
+            <view class="order-left">
+              <text class="order-time">{{item.timeStr}}</text>
+              <text class="order-desc">共 {{item.totalCount || '若干'}} 件</text>
+            </view>
+            <view class="order-right">
+              <text class="status-tag {{item.status}}">{{item.statusText}}</text>
+              <text class="arrow">></text>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 弹窗1：购物车详情 -->
+  <page-container show="{{showCartDetail}}" position="bottom" round>
+    <view class="cart-detail-box">
+      <view class="cart-header">
+        <text>已选商品</text>
+        <text class="clear-btn" bindtap="clearCart">清空</text>
+      </view>
+      <view class="cart-list">
+        <block wx:for="{{menuList}}" wx:key="id">
+          <view class="cart-item" wx:if="{{cart[item.id] > 0}}">
+            <text>{{item.name}}</text>
+            <view class="stepper">
+              <view class="step-btn minus" bindtap="updateCart" data-id="{{item.id}}" data-op="-1">-</view>
+              <text class="step-num">{{cart[item.id]}}</text>
+              <view class="step-btn plus" bindtap="updateCart" data-id="{{item.id}}" data-op="1">+</view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </page-container>
+
+  <!-- 弹窗2：提交订单确认 -->
+  <modal hidden="{{!showSubmitModal}}" title="确认下单" confirm-text="提交" cancel-text="取消" bindcancel="hideSubmitModal" bindconfirm="submitOrder">
+    <view class="modal-content">
+      <textarea class="remark-input" placeholder="备注 (如: 少酱、加海苔...)" bindinput="inputRemark" value="{{remark}}"></textarea>
+      <input class="pwd-input" type="number" password placeholder="请输入订单密码" bindinput="inputPwd" value="{{inputPwd}}"/>
+    </view>
+  </modal>
+</view>

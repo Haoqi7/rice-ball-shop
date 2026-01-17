@@ -1,0 +1,68 @@
+<view class="container">
+  
+  <block wx:if="{{order}}">
+    <!-- 状态进度条 (三段式，样式由JS控制stepIndex) -->
+    <view class="status-card">
+      <view class="step-box">
+        <!-- 阶段1: 待接单 -->
+        <view class="step-item {{stepIndex >= 0 ? 'active' : ''}}">
+          <view class="step-circle">1</view>
+          <view class="step-text">待接单</view>
+        </view>
+        <view class="step-line {{stepIndex >= 1 ? 'active-line' : ''}}"></view>
+        
+        <!-- 阶段2: 制作中 -->
+        <view class="step-item {{stepIndex >= 1 ? 'active' : ''}}">
+          <view class="step-circle">2</view>
+          <view class="step-text">制作中</view>
+        </view>
+        <view class="step-line {{stepIndex >= 2 ? 'active-line' : ''}}"></view>
+        
+        <!-- 阶段3: 已完成 -->
+        <view class="step-item {{stepIndex >= 2 ? 'active' : ''}}">
+          <view class="step-circle">3</view>
+          <view class="step-text">已完成</view>
+        </view>
+      </view>
+      
+      <view class="current-status-tip">
+        当前状态：<text style="font-weight:bold; color:#D2B48C">{{order.statusText}}</text>
+      </view>
+    </view>
+
+    <!-- 详情卡片 -->
+    <view class="detail-card">
+      <view class="section-title">订单明细</view>
+      
+      <view class="info-row">
+        <text>下单时间</text>
+        <text>{{order.timeStr}}</text>
+      </view>
+      
+      <view class="items-box">
+        <view wx:for="{{order.items}}" wx:key="name" class="item-row">
+          <text>{{item.name}}</text>
+          <text style="font-weight:bold">x{{item.count}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{order.remark}}" class="remark-box">
+        <text style="font-weight:bold">备注：</text>{{order.remark}}
+      </view>
+      
+      <!-- 取消按钮区域 -->
+      <view style="margin-top: 50rpx;">
+        <button wx:if="{{canCancel}}" type="warn" bindtap="cancelOrder">取消订单 (5分钟内)</button>
+        <button wx:else type="default" bindtap="goBack" style="background:#eee; color:#666">返回菜单</button>
+      </view>
+
+      <view wx:if="{{!canCancel && order.status === 'pending'}}" style="text-align:center; font-size:24rpx; color:#999; margin-top:20rpx;">
+        已超过5分钟或正在制作中，无法取消
+      </view>
+    </view>
+  </block>
+
+  <view wx:else style="text-align:center; padding: 100rpx; color:#999">
+    <text>正在同步订单信息...</text>
+  </view>
+</view>
