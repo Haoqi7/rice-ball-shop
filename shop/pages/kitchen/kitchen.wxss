@@ -18,6 +18,16 @@
   font-weight: bold;
 }
 
+/* 通知区域样式 */
+.notice-switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.switch-label { font-weight: bold; color: #5D4037; }
+.text-xs { font-size: 22rpx; }
+
+/* 订单卡片 */
 .order-card {
   border-left: 10rpx solid #ddd;
 }

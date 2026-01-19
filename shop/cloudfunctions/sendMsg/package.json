@@ -1,0 +1,11 @@
+{
+  "name": "send-msg",
+  "version": "1.0.0",
+  "description": "Send subscription message",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

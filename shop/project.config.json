@@ -18,7 +18,7 @@
   "cloudfunctionRoot": "cloudfunctions/",
   "compileType": "miniprogram",
   "libVersion": "latest",
-  "appid": "wx9a2219ac81eb21d7",
+  "appid": "",
   "projectname": "rice-ball-shop",
   "condition": {},
   "editorSetting": {

@@ -4,6 +4,28 @@
     <view class="tab {{activeTab==='history'?'active':''}}" bindtap="switchTab" data-tab="history">历史记录</view>
   </view>
 
+  <!-- 通知管理区域 -->
+  <view class="card">
+    <view class="notice-switch-row">
+      <view class="switch-label">
+        <text>👨‍🍳 后厨接单通知</text>
+        <view class="text-xs" style="color:#999; margin-top:4rpx;">
+          剩余可接收次数：<text style="color:#D2B48C; font-weight:bold; font-size:28rpx;">{{remainCount}}</text>
+        </view>
+      </view>
+      <switch checked="{{isSubscribed}}" bindchange="toggleSubscribe" color="#D2B48C"/>
+    </view>
+
+    <view wx:if="{{isSubscribed}}" style="margin-top: 20rpx; border-top: 1px dashed #eee; padding-top: 20rpx;">
+      <button type="primary" bindtap="addNotificationCount" style="background-color:#90EE90; color:#335c33; width:100%;">
+        🔔 点击增加次数 (+1)
+      </button>
+      <view class="text-xs text-center" style="color:#999; margin-top:10rpx;">
+        每点击允许一次，可多接收一条通知
+      </view>
+    </view>
+  </view>
+
   <view class="order-list">
     <block wx:for="{{displayOrders}}" wx:key="id">
       <view class="card order-card {{item.status}}">
@@ -25,7 +47,6 @@
           <text>备注：{{item.remark}}</text>
         </view>
 
-        <!-- 操作按钮区 -->
         <view class="action-row" wx:if="{{item.status !== 'finished'}}">
           <button class="btn btn-primary btn-sm" wx:if="{{item.status==='pending'}}" bindtap="changeStatus" data-id="{{item.id}}" data-status="making">开始制作</button>
           <button class="btn btn-success btn-sm" bindtap="changeStatus" data-id="{{item.id}}" data-status="finished">制作完成</button>

@@ -1,9 +1,7 @@
 const db = wx.cloud.database();
-const _ = db.command;
 
 Page({
   data: {
-    // 【修改点】增加了 "炒菜"
     categories: ["主食", "炒菜", "配料", "饮品"],
     curCategory: "主食",
     menuList: [],
@@ -18,26 +16,26 @@ Page({
 
   onShow() {
     this.loadMenu();
-    this.loadMyOrders();
+    this.loadRecentOrders(); 
     this.setData({ remark: "", inputPwd: "", showSubmitModal: false });
   },
 
   loadMenu() {
     wx.showLoading({ title: '加载菜单...' });
-    db.collection('menu').where({
-      isOn: true 
-    }).get().then(res => {
-      wx.hideLoading();
-      if (res.data.length > 0) {
-        const list = res.data.map(item => ({ ...item, id: item._id }));
-        this.setData({ menuList: list });
-      } else {
+    db.collection('menu').where({ isOn: true }).get()
+      .then(res => {
+        wx.hideLoading();
+        if (res.data.length > 0) {
+          const list = res.data.map(item => ({ ...item, id: item._id }));
+          this.setData({ menuList: list });
+        } else {
+          this.useFallbackMenu();
+        }
+      })
+      .catch(() => {
+        wx.hideLoading();
         this.useFallbackMenu();
-      }
-    }).catch(err => {
-      wx.hideLoading();
-      this.useFallbackMenu();
-    });
+      });
   },
 
   useFallbackMenu() {
@@ -49,17 +47,10 @@ Page({
     this.setData({ menuList: fallbackMenu });
   },
 
-  loadMyOrders() {
-    const myIds = wx.getStorageSync('my_cloud_ids') || [];
-    if (myIds.length === 0) {
-      this.setData({ myRecentOrders: [] });
-      return;
-    }
-
+  loadRecentOrders() {
     db.collection('orders')
-      .where({ _id: _.in(myIds) })
       .orderBy('timestamp', 'desc')
-      .limit(20) // 稍微增加拉取数量
+      .limit(10) 
       .get()
       .then(res => {
         const now = Date.now();
@@ -74,7 +65,8 @@ Page({
           return { ...o, id: o._id, statusText, canCancel };
         });
         this.setData({ myRecentOrders: list });
-      });
+      })
+      .catch(console.error);
   },
 
   navToDetail(e) {
@@ -134,11 +126,29 @@ Page({
       return;
     }
 
+    // 1. 下单前先申请“给自己的”通知权限 (保留给顾客的通知机会)
+    const TEMPLATE_ID = ''; 
+    wx.requestSubscribeMessage({
+      tmplIds: [TEMPLATE_ID],
+      complete: (res) => {
+        this.doSubmitToCloud(orderItems);
+      }
+    });
+  },
+
+  // 抽离出的下单逻辑
+  doSubmitToCloud(orderItems) {
     wx.showLoading({ title: '下单中...' });
 
+    let dishSummary = orderItems.map(i => `${i.name}x${i.count}`).join(',');
+    if (dishSummary.length > 18) dishSummary = dishSummary.substring(0, 18) + '...';
+    
+    const timeStr = new Date().toLocaleString();
+
     const newOrder = {
-      timeStr: new Date().toLocaleString(),
+      timeStr: timeStr,
       items: orderItems,
+      dishSummary: dishSummary, 
       remark: this.data.remark,
       status: 'pending',
       timestamp: Date.now()
@@ -147,15 +157,27 @@ Page({
     db.collection('orders').add({
       data: newOrder,
       success: res => {
-        const myIds = wx.getStorageSync('my_cloud_ids') || [];
-        myIds.push(res._id); 
-        wx.setStorageSync('my_cloud_ids', myIds);
-
         wx.hideLoading();
         wx.showToast({ title: '下单成功！', icon: 'success' });
+        
+        // 【核心修复】下单成功后，呼叫云函数通知后厨 (A和C)
+        // 这里的 type: 'to_staff' 告诉云函数去查 subscribers 表
+        wx.cloud.callFunction({
+          name: 'sendMsg',
+          data: {
+            type: 'to_staff', 
+            orderTime: timeStr,
+            dishName: '新订单：' + dishSummary,
+            remark: this.data.remark,
+            status: '待制作'
+          }
+        }).catch(err => {
+          console.error('通知后厨失败', err);
+        });
+
         this.clearCart();
         this.hideSubmitModal();
-        this.loadMyOrders(); 
+        this.loadRecentOrders(); 
         wx.vibrateLong();
       },
       fail: err => {
