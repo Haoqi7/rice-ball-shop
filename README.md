@@ -140,18 +140,7 @@ rice-ball-shop/
 
 ---
 
-## 🛡️ 隐私脱敏清单 (Checklist)
 
-在将代码提交到GitHub之前，请按照下表检查并修改文件，防止隐私泄露：
-
-| 文件路径 | 需修改内容 | 操作建议 |
-| :--- | :--- | :--- |
-| `project.config.json` | `appid` | 改为 `"touristappid"` 或 `""` |
-| `project.private.config.json` | 整个文件 | **不要上传**。确保已添加到 `.gitignore` |
-| `cloudfunctions/sendMsg/index.js` | `templateId` | 改为 `'YOUR_TEMPLATE_ID'` |
-| `pages/order/order.js` | `const TEMPLATE_ID` | 改为 `'YOUR_TEMPLATE_ID'` |
-| `pages/kitchen/kitchen.js` | `const TEMPLATE_ID` | 改为 `'YOUR_TEMPLATE_ID'` |
-| `app.js` | `env` (如果写死) | 建议留空让小程序自动识别，或改为 `'YOUR_ENV_ID'` |
 
 ## 📄 开源协议
 
